@@ -1,7 +1,7 @@
 package br.com.easynvest.publish_image
 
 class PublishImage{
-    def call (jenkins, jobParams) {
+    def call (jenkins) {
 
         jenkins.podTemplate(
             yaml: """
