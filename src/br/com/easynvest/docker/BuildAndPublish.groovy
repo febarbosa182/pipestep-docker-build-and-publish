@@ -39,7 +39,7 @@ spec:
                     jenkins.echo "Build and Publish Docker image Step"
 
                     jenkins.docker.build("\${DOCKER_IMAGE}:\${APP_VERSION}.\${GIT_COMMIT}","--network=host .")
-                    jenkins.docker.image("\${DOCKER_IMAGE}:\${APP_VERSION}.\${GIT_COMMIT}").push()
+                    // jenkins.docker.image("\${DOCKER_IMAGE}:\${APP_VERSION}.\${GIT_COMMIT}").push()
                 }
             }
         }
