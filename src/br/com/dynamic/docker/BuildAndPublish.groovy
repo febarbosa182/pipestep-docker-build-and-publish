@@ -1,4 +1,4 @@
-package br.com.easynvest.publish_image
+package br.com.dynamic.publish_image
 
 class PublishImage{
     def call (jenkins) {
