@@ -14,7 +14,7 @@ metadata:
 spec:
   containers:
   - name: docker
-    image: docker:20.10.0
+    image: docker:20.10.2
     tty: true
     imagePullPolicy: IfNotPresent
     command:
