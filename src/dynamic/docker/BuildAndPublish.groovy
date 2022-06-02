@@ -24,7 +24,7 @@ spec:
             """,
             yamlMergeStrategy: jenkins.merge(),
             workspaceVolume: jenkins.persistentVolumeClaimWorkspaceVolume(
-                claimName: "pvc-${jenkins.env.JENKINS_AGENT_NAME}",
+                claimName: "pvc-workspace-${jenkins.env.JENKINS_AGENT_NAME}",
                 readOnly: false
             )
         )
