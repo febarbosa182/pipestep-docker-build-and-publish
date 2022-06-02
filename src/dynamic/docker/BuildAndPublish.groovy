@@ -8,24 +8,19 @@ class PublishImage{
 apiVersion: v1
 kind: Pod
 metadata:
-  name: docker
+  name: kaniko
   labels:
-    app : docker
+    app : kaniko
 spec:
   containers:
-  - name: docker
-    image: docker:20.10.2
+  - name: kaniko
+    image: gcr.io/kaniko-project/executor:v1.8.1
     tty: true
     imagePullPolicy: IfNotPresent
     command:
-      - /bin/sh
-    volumeMounts:
-    - name: dockersock
-      mountPath: "/var/run/docker.sock"
-  volumes:
-  - name: dockersock
-    hostPath:
-      path: /var/run/docker.sock
+    - sleep
+    args:
+    - 1d
             """,
             yamlMergeStrategy: jenkins.merge(),
             workspaceVolume: jenkins.persistentVolumeClaimWorkspaceVolume(
@@ -35,11 +30,9 @@ spec:
         )
         {
             jenkins.node(jenkins.POD_LABEL){
-                jenkins.container('docker'){
+                jenkins.container('kaniko') {
                     jenkins.echo "Build and Publish Docker image Step"
-
-                    jenkins.docker.build("\${DOCKER_IMAGE}:\${APP_VERSION}.\${GIT_COMMIT}","--network=host .")
-                    // jenkins.docker.image("\${DOCKER_IMAGE}:\${APP_VERSION}.\${GIT_COMMIT}").push()
+                    jenkins.sh label: "Build image with Kaniko", script: "sh '/kaniko/executor -f `pwd`/Dockerfile -c `pwd` --insecure --skip-tls-verify --cache=true --no-push --destination=\${DOCKER_IMAGE}:\${APP_VERSION}.\${GIT_COMMIT}"
                 }
             }
         }
