@@ -1,4 +1,4 @@
-package br.com.dynamic.publish_image
+package dynamic.publish_image
 
 class PublishImage{
     def call (jenkins) {
