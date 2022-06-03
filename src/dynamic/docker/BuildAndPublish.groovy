@@ -14,13 +14,11 @@ metadata:
 spec:
   containers:
   - name: kaniko
-    image: gcr.io/kaniko-project/executor:v1.8.1
+    image: gcr.io/kaniko-project/executor:v1.8.1-debug
     tty: true
     imagePullPolicy: IfNotPresent
     command:
-    - sleep
-    args:
-    - 1d
+    - /bin/sh
             """,
             yamlMergeStrategy: jenkins.merge(),
             workspaceVolume: jenkins.persistentVolumeClaimWorkspaceVolume(
