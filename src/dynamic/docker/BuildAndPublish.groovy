@@ -15,7 +15,9 @@ class PublishImage{
                 - name: docker
                   image: docker:20.10
                   command:
-                  - /bin/sh
+                  - sleep
+                  args:
+                  - 99d
                   volumeMounts:
                   - name: docker-socket
                     mountPath: /var/run
