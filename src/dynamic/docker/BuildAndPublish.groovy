@@ -5,20 +5,27 @@ class PublishImage{
 
         jenkins.podTemplate(
             yaml: """
-apiVersion: v1
-kind: Pod
-metadata:
-  name: kaniko
-  labels:
-    app : kaniko
-spec:
-  containers:
-  - name: kaniko
-    image: gcr.io/kaniko-project/executor:v1.9.0-debug
-    tty: true
-    imagePullPolicy: IfNotPresent
-    command:
-    - /bin/sh
+              apiVersion: v1
+              kind: Pod
+              spec:
+                volumes:
+                - name: docker-socket
+                  emptyDir: {}
+                containers:
+                - name: docker
+                  image: docker:20.10
+                  command:
+                  - /bin/sh
+                  volumeMounts:
+                  - name: docker-socket
+                    mountPath: /var/run
+                - name: docker-daemon
+                  image: docker:20.10-dind
+                  securityContext:
+                    privileged: true
+                  volumeMounts:
+                  - name: docker-socket
+                    mountPath: /var/run
             """,
             yamlMergeStrategy: jenkins.merge(),
             workspaceVolume: jenkins.persistentVolumeClaimWorkspaceVolume(
@@ -30,8 +37,8 @@ spec:
             jenkins.node(jenkins.POD_LABEL){
                 jenkins.container('kaniko') {
                     jenkins.echo "Build and Publish Docker image Step"
-                    jenkins.sh label: "Build image with Kaniko", script: """
-                        /kaniko/executor -f ./Dockerfile -c ./ --insecure --skip-tls-verify --cache=true --no-push --destination=\${DOCKER_IMAGE}:\${APP_VERSION}.\${GIT_COMMIT}
+                    jenkins.sh label: "Build image and publish multi architecture", script: """
+                         docker buildx build --platform linux/amd64,linux/arm64,linux/arm/v7 -t \${DOCKER_IMAGE}:\${APP_VERSION}.\${GIT_COMMIT} --push .
                     """
                 }
             }
