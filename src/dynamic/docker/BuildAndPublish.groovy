@@ -31,7 +31,7 @@ spec:
                 jenkins.container('kaniko') {
                     jenkins.echo "Build and Publish Docker image Step"
                     jenkins.sh label: "Build image with Kaniko", script: """"
-                        sh '/kaniko/executor -f `pwd`/Dockerfile -c `pwd` --insecure --skip-tls-verify --cache=true --no-push --destination=\${DOCKER_IMAGE}:\${APP_VERSION}.\${GIT_COMMIT}'
+                        /kaniko/executor -f `pwd`/Dockerfile -c `pwd` --insecure --skip-tls-verify --cache=true --no-push --destination=\${DOCKER_IMAGE}:\${APP_VERSION}.\${GIT_COMMIT}
                     """
                 }
             }
