@@ -14,7 +14,7 @@ metadata:
 spec:
   containers:
   - name: kaniko
-    image: gcr.io/kaniko-project/executor:v1.8.1-debug
+    image: gcr.io/kaniko-project/executor:v1.9.0-debug
     tty: true
     imagePullPolicy: IfNotPresent
     command:
@@ -30,7 +30,9 @@ spec:
             jenkins.node(jenkins.POD_LABEL){
                 jenkins.container('kaniko') {
                     jenkins.echo "Build and Publish Docker image Step"
-                    jenkins.sh label: "Build image with Kaniko", script: "sh '/kaniko/executor -f `pwd`/Dockerfile -c `pwd` --insecure --skip-tls-verify --cache=true --no-push --destination=\${DOCKER_IMAGE}:\${APP_VERSION}.\${GIT_COMMIT}"
+                    jenkins.sh label: "Build image with Kaniko", script: """"
+                        sh '/kaniko/executor -f `pwd`/Dockerfile -c `pwd` --insecure --skip-tls-verify --cache=true --no-push --destination=\${DOCKER_IMAGE}:\${APP_VERSION}.\${GIT_COMMIT}'
+                    """
                 }
             }
         }
