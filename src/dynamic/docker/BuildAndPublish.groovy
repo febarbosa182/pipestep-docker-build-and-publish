@@ -39,6 +39,8 @@ class PublishImage{
             jenkins.node(jenkins.POD_LABEL){
                 jenkins.container('docker') {
                     jenkins.echo "Build and Publish Docker image Step"
+                    def packageJson = jenkins.readJSON file: 'package.json'
+                    jenkins.env.APP_VERSION = packageJson.version
                     jenkins.sh label: "Build image and publish multi architecture", script: """
                          docker buildx build --platform linux/amd64,linux/arm64,linux/arm/v7 -t \${DOCKER_IMAGE}:\${APP_VERSION}.\${GIT_COMMIT} --push .
                     """
