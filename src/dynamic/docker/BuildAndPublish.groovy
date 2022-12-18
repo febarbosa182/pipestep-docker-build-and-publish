@@ -14,10 +14,13 @@ class PublishImage{
                 containers:
                 - name: docker
                   image: docker:20.10
+                  readinessProbe:
+                    exec:
+                      command: [sh, -c, "ls -S /var/run/docker.sock"]
                   command:
                   - sleep
                   args:
-                  - 99d
+                  - 1d
                   volumeMounts:
                   - name: docker-socket
                     mountPath: /var/run
@@ -41,6 +44,7 @@ class PublishImage{
                     jenkins.echo "Build and Publish Docker image Step"
                     def packageJson = jenkins.readJSON file: 'package.json'
                     jenkins.env.APP_VERSION = packageJson.version
+                    jenkins.env.DOCKER_BUILDKIT = "1"
                     // WE WILL NOT PUSH SINCE IT'S A LOCAL STACK
                     jenkins.sh label: "Build image and publish multi architecture", script: """
                         docker buildx create --use
