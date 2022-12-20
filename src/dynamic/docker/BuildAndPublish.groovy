@@ -5,7 +5,7 @@ class PublishImage{
 
         def builds = [:]
         def architecturesParam = jenkins.env.ARCHITECTURES
-        def architectures = architecturesParam.split(" ")
+        def architectures = architecturesParam.split(",")
         for (architecture in architectures) {
             builds["Build ${architecture}"] = {
                 jenkins.podTemplate(
