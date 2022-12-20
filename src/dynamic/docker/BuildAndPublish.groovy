@@ -5,7 +5,7 @@ class PublishImage{
 
         def builds = [:]
         def architecturesParam = jenkins.env.ARCHITECTURES
-        def architectures = architecturesParam.split(" ").trim()
+        def architectures = architecturesParam.split(" ")
         for (architecture in architectures) {
             builds["Build ${arch}"] = {
                 jenkins.podTemplate(
@@ -53,7 +53,7 @@ class PublishImage{
                             // WE WILL NOT PUSH SINCE IT'S A LOCAL STACK
                             jenkins.sh label: "Build image and publish multi architecture", script: """
                                 docker buildx create --use
-                                docker buildx build --platform ${architecture} -t \${DOCKER_IMAGE}:\${APP_VERSION}.\${GIT_COMMIT} .
+                                docker buildx build --platform ${architecture.trim()} -t \${DOCKER_IMAGE}:\${APP_VERSION}.\${GIT_COMMIT} .
                             """
                         }
                     }
