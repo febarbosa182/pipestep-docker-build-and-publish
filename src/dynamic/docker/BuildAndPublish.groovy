@@ -60,8 +60,7 @@ class PublishImage{
                 }
             }
         }
-        jenkins.parallel builds,
-            failFast: true
+        jenkins.parallel builds
 
         // jenkins.podTemplate(
         //     yaml: """
